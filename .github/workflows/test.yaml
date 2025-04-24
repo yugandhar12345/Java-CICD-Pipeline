@@ -127,7 +127,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y clamav
-          sudo freshclam  # Update virus definitions
+          sudo systemctl stop clamav-freshclam 
+          sudo freshclam
+          sudo freshclam  
           clamscan -r . --infected --bell --quiet | tee malware-scan-results.txt
   
       - name: Upload scan results
