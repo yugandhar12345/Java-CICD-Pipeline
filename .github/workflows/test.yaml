@@ -103,13 +103,19 @@ jobs:
     needs: semgrep
     steps:
       - uses: actions/checkout@v3
-      - name: Trivy Scan
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: fs
-          scan-ref: .
-          format: table
-          severity: HIGH,CRITICAL
+  
+      - name: Install Trivy CLI (v0.38.3)
+        run: |
+          sudo apt update
+          sudo apt install -y wget apt-transport-https
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.38.3/trivy_0.38.3_Linux-64bit.deb
+          sudo dpkg -i trivy_0.38.3_Linux-64bit.deb
+          trivy --version
+
+      - name: Run Trivy Scan
+        run: |
+          trivy fs . --format table --severity HIGH,CRITICAL
+
 
   malware-scan:
     runs-on: self-hosted
