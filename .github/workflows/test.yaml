@@ -118,7 +118,7 @@ jobs:
 
 
   malware-scan:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: dependency-check
     steps:
       - uses: actions/checkout@v3
