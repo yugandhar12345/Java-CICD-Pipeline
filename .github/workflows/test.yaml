@@ -66,3 +66,108 @@ jobs:
         with:
           name: jacoco-report
           path: target/site/jacoco/
+
+
+  sonarcloud:
+    runs-on: self-hosted
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectKey: ${{ env.SONAR_PROJECT_KEY }}
+          organization: ${{ env.SONAR_ORGANIZATION }}
+        env:
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
+
+  semgrep:
+    runs-on: self-hosted
+    needs: sonarcloud
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: auto
+
+  dependency-check:
+    runs-on: self-hosted
+    needs: semgrep
+    steps:
+      - uses: actions/checkout@v3
+      - name: Trivy Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: table
+          severity: HIGH,CRITICAL
+
+  malware-scan:
+    runs-on: self-hosted
+    needs: dependency-check
+    steps:
+      - uses: actions/checkout@v3
+      - name: ClamAV Scan
+        run: |
+          sudo apt-get update && sudo apt-get install -y clamav
+          clamscan -r . | tee malware-scan-results.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: malware-scan-results
+          path: malware-scan-results.txt
+
+  image-build:
+    runs-on: self-hosted
+    needs: malware-scan
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker image
+        run: |
+          docker build -t $DOCKER_REPO:latest .
+          docker images
+
+  image-scan:
+    runs-on: self-hosted
+    needs: image-build
+    steps:
+      - name: Trivy Docker Scan
+        run: trivy image $DOCKER_REPO:latest
+
+  image-push:
+    runs-on: self-hosted
+    needs: image-scan
+    steps:
+      - name: Docker Login
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Docker Push
+        run: docker push $DOCKER_REPO:latest
+
+  deploy:
+    runs-on: self-hosted
+    needs: image-push
+    steps:
+      - name: ArgoCD Deploy
+        run: |
+          curl -sLO https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+          chmod +x argocd-linux-amd64
+          sudo mv argocd-linux-amd64 /usr/local/bin/argocd
+          argocd login $ARGOCD_SERVER --username $ARGOCD_USERNAME --password $ARGOCD_PASSWORD --insecure
+          argocd app sync app-java
+          argocd app wait app-java --health --operation
+
+  dast:
+    runs-on: self-hosted
+    needs: deploy
+    steps:
+      - name: Run OWASP ZAP DAST Scan
+        run: |
+          mkdir -p owasp-zap-report
+          docker run -v $(pwd):/zap/wrk/:rw ghcr.io/zaproxy/zaproxy:stable zap.sh \
+            -cmd -quickurl http://your-service-url \
+            -quickout /zap/wrk/owasp-zap-report/report.html
+      - uses: actions/upload-artifact@v3
+        with:
+          name: zap-report
+          path: owasp-zap-report/
