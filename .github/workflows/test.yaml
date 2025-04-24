@@ -78,6 +78,7 @@ jobs:
         with:
           projectKey: security3124314_sonarqube
           organization: security3124314
+          SONAR_HOST_URL: https://sonarcloud.io
         env:
           SONAR_TOKEN: 836d1459153d737ee9ad1d896fe0a297b6df740e
 
