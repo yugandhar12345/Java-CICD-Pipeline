@@ -69,17 +69,17 @@ jobs:
 
 
   sonarcloud:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: test
     steps:
       - uses: actions/checkout@v3
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:
-          projectKey: ${{ env.SONAR_PROJECT_KEY }}
-          organization: ${{ env.SONAR_ORGANIZATION }}
+          projectKey: security3124314_sonarqube
+          organization: security3124314
         env:
-          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
+          SONAR_TOKEN: 836d1459153d737ee9ad1d896fe0a297b6df740e
 
   semgrep:
     runs-on: self-hosted
