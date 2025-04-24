@@ -129,8 +129,9 @@ jobs:
           sudo apt-get install -y clamav
           sudo systemctl stop clamav-freshclam 
           sudo freshclam
-          sudo freshclam  
-          clamscan -r . --infected --bell --quiet | tee malware-scan-results.txt
+          sudo freshclam 
+          clamscan -r . | tee malware-scan-results.txt  
+          # clamscan -r . --infected --bell --quiet | tee malware-scan-results.txt
   
       - name: Upload scan results
         uses: actions/upload-artifact@v4
