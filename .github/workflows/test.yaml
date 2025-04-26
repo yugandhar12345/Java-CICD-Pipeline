@@ -244,44 +244,23 @@ jobs:
           sudo apt update
           sudo apt install wget -y
   
-          # Download and install ZAP
+          # Download and install ZAP into user space (no sudo needed)
+          mkdir -p $HOME/zap
+          cd $HOME/zap
           wget https://github.com/zaproxy/zaproxy/releases/download/v2.16.0/ZAP_2_16_0_unix.sh
           chmod +x ZAP_2_16_0_unix.sh
-          sudo ./ZAP_2_16_0_unix.sh -q -dir zaproxy
+          ./ZAP_2_16_0_unix.sh -q -dir $HOME/zap/zaproxy
   
-          # Create writable report directory (no sudo!)
-          sudo mkdir -p zaproxy/owasp-zap-report
-          sudo chmod -R 777 zaproxy/owasp-zap-report
-
+          # Create writable report directory
+          mkdir -p $HOME/zap/zaproxy/owasp-zap-report
   
           # Run ZAP and generate the report
-          zaproxy/zap.sh -cmd -quickurl http://testphp.vulnweb.com \
-            -quickout zaproxy/owasp-zap-report/report.html \
+          $HOME/zap/zaproxy/zap.sh -cmd -quickurl http://testphp.vulnweb.com \
+            -quickout $HOME/zap/zaproxy/owasp-zap-report/report.html \
             -silent
   
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
         with:
           name: zap-report
-          path: zaproxy/owasp-zap-report/report.html
-
-
-
-
-
-
-
-  # dast:
-  #   runs-on:  ubuntu-latest
-  #   # needs: deploy
-  #   steps:
-  #     - name: Run OWASP ZAP DAST Scan
-  #       run: |
-  #         mkdir -p owasp-zap-report
-  #         docker run -v $(pwd):/zap/wrk/:rw ghcr.io/zaproxy/zaproxy:stable zap.sh \
-  #           -cmd -quickurl http://your-service-url \
-  #           -quickout /zap/wrk/owasp-zap-report/report.html
-  #     - uses: actions/upload-artifact@v3
-  #       with:
-  #         name: zap-report
-  #         path: owasp-zap-report/
+          path: ${{ env.HOME }}/zap/zaproxy/owasp-zap-report/report.html
