@@ -100,7 +100,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=security3124314_sonarqube
+            -Dsonar.projectKey=shaik-byte_complete---cicd-java
             -Dsonar.organization=security3124314
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.java.binaries=target
