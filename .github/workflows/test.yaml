@@ -251,7 +251,7 @@ jobs:
   
           # Create writable report directory (no sudo!)
           sudo mkdir -p zaproxy/owasp-zap-report
-          sudo chmod -R 777 /opt/zaproxy/owasp-zap-report
+          sudo chmod -R 777 zaproxy/owasp-zap-report
 
   
           # Run ZAP and generate the report
