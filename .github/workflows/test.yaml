@@ -239,13 +239,14 @@ jobs:
       - name: Run OWASP ZAP DAST Scan
         run: |
           docker run --rm \
+            -e JAVA_OPTS="-Xmx2g" \
             -v "${{ github.workspace }}/owasp-zap-report:/zap/wrk/:rw" \
             ghcr.io/zaproxy/zaproxy:stable zap.sh \
             -cmd -quickurl http://testphp.vulnweb.com \
             -quickout /zap/wrk/report.html
 
       - name: Check if report was created
-        run: ls -l owasp-zap-report
+        run: ls -lh owasp-zap-report
 
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
