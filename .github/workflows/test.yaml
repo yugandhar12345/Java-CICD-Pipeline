@@ -251,7 +251,7 @@ jobs:
 
 
           # Make report directory inside workspace
-          mkdir -p zaproxy/owasp-zap-report
+          sudo mkdir -p zaproxy/owasp-zap-report
 
           # Run ZAP
           zaproxy/zap.sh -cmd -quickurl http://34.35.54.231 \
