@@ -243,13 +243,13 @@ jobs:
         run: |
           sudo apt update
           sudo apt install wget -y
-          mkdir -p $HOME/zap
-          cd $HOME/zap
-          wget https://github.com/zaproxy/zaproxy/releases/download/v2.16.0/ZAP_2_16_0_unix.sh
-          chmod +x ZAP_2_16_0_unix.sh
-          ./ZAP_2_16_0_unix.sh -q -dir $HOME/zap/zaproxy
-          mkdir -p $HOME/zap/zaproxy/owasp-zap-report
-          $HOME/zap/zaproxy/zap.sh -cmd -quickurl http://testphp.vulnweb.com \
+          sudo mkdir -p $HOME/zap
+          sudo cd $HOME/zap
+          sudo wget https://github.com/zaproxy/zaproxy/releases/download/v2.16.0/ZAP_2_16_0_unix.sh
+          sudo chmod +x ZAP_2_16_0_unix.sh
+          sudo ./ZAP_2_16_0_unix.sh -q -dir $HOME/zap/zaproxy
+          sudo mkdir -p $HOME/zap/zaproxy/owasp-zap-report
+          sudo $HOME/zap/zaproxy/zap.sh -cmd -quickurl http://testphp.vulnweb.com \
             -quickout $HOME/zap/zaproxy/owasp-zap-report/report.html \
             -silent
   
