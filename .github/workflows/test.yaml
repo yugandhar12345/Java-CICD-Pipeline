@@ -69,12 +69,12 @@ jobs:
 
 
 
-  sonarcloud:
-    name: SonarCloud Scan
+  build:
+    name: SonarCloud Analysis
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
@@ -92,10 +92,13 @@ jobs:
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          organization: Shaik Mahammad Gouse
-          projectKey: shaik-byte_complete---cicd-java
-          token:  ${{ env.SONAR_TOKEN }}
+          args: >
+            -Dsonar.projectKey=your-project-key
+            -Dsonar.organization=your-org-name
+            -Dsonar.host.url=https://sonarcloud.io
 
 
   # sonarcloud:
