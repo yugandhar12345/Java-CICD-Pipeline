@@ -188,7 +188,7 @@ jobs:
       - name: Download JAR Artifact
         uses: actions/download-artifact@v4
         with:
-          name: java-app-jar
+          name: target/*.war
           path: target 
       - name: Build Docker image
         run: |
