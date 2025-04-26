@@ -95,7 +95,8 @@ jobs:
         with:
           organization: Shaik Mahammad Gouse
           projectKey: shaik-byte_complete---cicd-java
-          token: 13cf3afcf82c9506526d65e5ecb9307b24dfbd0a
+          token:  ${{ env.SONAR_TOKEN }}
+
 
   # sonarcloud:
   #   runs-on: ubuntu-latest
