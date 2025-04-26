@@ -41,174 +41,174 @@ jobs:
           name: java-app-jar
           path: target/codekamikaze-1.0.0.jar
 
-  # test:
-  #   runs-on: ubuntu-latest
-  #   needs: build
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-  #     - name: Set up JDK 17
-  #       uses: actions/setup-java@v3
-  #       with:
-  #         distribution: 'temurin'
-  #         java-version: '17'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-  #     - name: Build and Run Tests with Maven
-  #       run: mvn clean verify
+      - name: Build and Run Tests with Maven
+        run: mvn clean verify
 
-  #     - name: List JaCoCo coverage report
-  #       run: |
-  #         ls -R target/site/jacoco || echo "No coverage report found"
+      - name: List JaCoCo coverage report
+        run: |
+          ls -R target/site/jacoco || echo "No coverage report found"
 
-  #     - name: Upload JaCoCo report as artifact
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: jacoco-report
-  #         path: target/site/jacoco/
-
-
+      - name: Upload JaCoCo report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
 
 
-  # sonar-scan:
-  #   name: Build and analyze
-  #   runs-on: ubuntu-latest
-  #   needs: test
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-  #     - name: Set up JDK 17
-  #       uses: actions/setup-java@v4
-  #       with:
-  #         java-version: 17
-  #         distribution: 'zulu' # Alternative distribution options are available.
-  #     - name: Cache SonarQube packages
-  #       uses: actions/cache@v4
-  #       with:
-  #         path: ~/.sonar/cache
-  #         key: ${{ runner.os }}-sonar
-  #         restore-keys: ${{ runner.os }}-sonar
-  #     - name: Cache Maven packages
-  #       uses: actions/cache@v4
-  #       with:
-  #         path: ~/.m2
-  #         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-  #         restore-keys: ${{ runner.os }}-m2
-  #     - name: Download JaCoCo report
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: jacoco-report
-  #         path: jacoco-report # Create a directory to download the report
-  #     - name: List downloaded JaCoCo report contents
-  #       run: ls -R jacoco-report
-  #     - name: Build and analyze
-  #       env:
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #       run: |
-  #         mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-  #           -Dsonar.login=$SONAR_TOKEN \
-  #           -Dsonar.sources=src/main/java \
-  #           -Dsonar.tests=src/test/java \
-  #           -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
-  #     # - name: Build and analyze
-  #     #   env:
-  #     #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #     #   # run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shaik-byte_complete---cicd-java -Dsonar.organization=security3124314 -Dsonar.host.url=https://sonarcloud.io
-  #     #   run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.login=$SONAR_TOKEN
 
-  # semgrep:
-  #   runs-on: ubuntu-latest
-  #   needs: sonar-scan
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Install Semgrep
-  #       run: |
-  #         sudo snap install semgrep --classic
-  #     - name: Run Semgrep
-  #       uses: returntocorp/semgrep-action@v1
-  #       with:
-  #         config: auto
+  sonar-scan:
+    name: Build and analyze
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'zulu' # Alternative distribution options are available.
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Download JaCoCo report
+        uses: actions/download-artifact@v4
+        with:
+          name: jacoco-report
+          path: jacoco-report # Create a directory to download the report
+      - name: List downloaded JaCoCo report contents
+        run: ls -R jacoco-report
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.login=$SONAR_TOKEN \
+            -Dsonar.sources=src/main/java \
+            -Dsonar.tests=src/test/java \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
-  # dependency-check:
-  #   runs-on: ubuntu-latest
-  #   needs: semgrep
-  #   steps:
-  #     - uses: actions/checkout@v3
+      # - name: Build and analyze
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #   # run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shaik-byte_complete---cicd-java -Dsonar.organization=security3124314 -Dsonar.host.url=https://sonarcloud.io
+      #   run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.login=$SONAR_TOKEN
+
+  semgrep:
+    runs-on: ubuntu-latest
+    needs: sonar-scan
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Semgrep
+        run: |
+          sudo snap install semgrep --classic
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: auto
+
+  dependency-check:
+    runs-on: ubuntu-latest
+    needs: semgrep
+    steps:
+      - uses: actions/checkout@v3
   
-  #     - name: Install Trivy CLI (v0.38.3)
-  #       run: |
-  #         sudo apt update
-  #         sudo apt install -y wget apt-transport-https
-  #         wget https://github.com/aquasecurity/trivy/releases/download/v0.38.3/trivy_0.38.3_Linux-64bit.deb
-  #         sudo dpkg -i trivy_0.38.3_Linux-64bit.deb
-  #         trivy --version
+      - name: Install Trivy CLI (v0.38.3)
+        run: |
+          sudo apt update
+          sudo apt install -y wget apt-transport-https
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.38.3/trivy_0.38.3_Linux-64bit.deb
+          sudo dpkg -i trivy_0.38.3_Linux-64bit.deb
+          trivy --version
 
-  #     - name: Run Trivy Scan
-  #       run: |
-  #         trivy fs . --format table --severity HIGH,CRITICAL
+      - name: Run Trivy Scan
+        run: |
+          trivy fs . --format table --severity HIGH,CRITICAL
 
 
-  # malware-scan:
-  #   runs-on: ubuntu-latest
-  #   needs: dependency-check
-  #   steps:
-  #     - uses: actions/checkout@v3
+  malware-scan:
+    runs-on: ubuntu-latest
+    needs: dependency-check
+    steps:
+      - uses: actions/checkout@v3
   
-  #     - name: Install ClamAV and run scan
-  #       run: |
-  #         sudo apt-get update
-  #         sudo apt-get install -y clamav
-  #         sudo systemctl stop clamav-freshclam 
-  #         sudo freshclam
-  #         sudo freshclam 
-  #         clamscan -r . | tee malware-scan-results.txt  
-  #         # clamscan -r . --infected --bell --quiet | tee malware-scan-results.txt
+      - name: Install ClamAV and run scan
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clamav
+          sudo systemctl stop clamav-freshclam 
+          sudo freshclam
+          sudo freshclam 
+          clamscan -r . | tee malware-scan-results.txt  
+          # clamscan -r . --infected --bell --quiet | tee malware-scan-results.txt
   
-  #     - name: Upload scan results
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: malware-scan-results
-  #         path: malware-scan-results.txt
+      - name: Upload scan results
+        uses: actions/upload-artifact@v4
+        with:
+          name: malware-scan-results
+          path: malware-scan-results.txt
 
 
 
-  # image-build:
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     DOCKER_REPO: shaikbyte/cicd-java
-  #     DOCKER_TAG: latest
-  #   needs: build
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Download JAR Artifact
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: java-app-jar
-  #         path: target 
-  #     - name: Build Docker image
-  #       run: |
-  #         docker build -t $DOCKER_REPO:latest .
-  #         docker images
+  image-build:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_REPO: shaikbyte/cicd-java
+      DOCKER_TAG: latest
+    needs: malware-scan
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download JAR Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: java-app-jar
+          path: target 
+      - name: Build Docker image
+        run: |
+          docker build -t $DOCKER_REPO:latest .
+          docker images
 
-  #     - name: Install Trivy
-  #       run: |
-  #         sudo apt-get update
-  #         sudo apt-get install wget apt-transport-https gnupg lsb-release -y
-  #         wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-  #         echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
-  #         sudo apt-get update
-  #         sudo apt-get install trivy -y
-  #         docker images
+      - name: Install Trivy
+        run: |
+          sudo apt-get update
+          sudo apt-get install wget apt-transport-https gnupg lsb-release -y
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install trivy -y
+          docker images
 
-  #     - name: Trivy Docker Scan
-  #       run: trivy image $DOCKER_REPO:$DOCKER_TAG
+      - name: Trivy Docker Scan
+        run: trivy image $DOCKER_REPO:$DOCKER_TAG
 
-  #     - name: Docker Login
-  #       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-  #     - name: Docker Push
-  #       run: docker push $DOCKER_REPO:latest
+      - name: Docker Login
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Docker Push
+        run: docker push $DOCKER_REPO:latest
 
   # deploy:
   #   runs-on:  ubuntu-latest
@@ -228,6 +228,7 @@ jobs:
 
   dast:
     runs-on: ubuntu-latest
+    needs: image-build
   
     steps:
       - name: Checkout code
