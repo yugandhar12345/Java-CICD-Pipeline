@@ -174,41 +174,41 @@ jobs:
 
 
 
-  image-build:
-    runs-on: ubuntu-latest
-    env:
-      DOCKER_REPO: shaikbyte/cicd-java
-      DOCKER_TAG: latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download JAR Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: java-app-jar
-          path: target 
-      - name: Build Docker image
-        run: |
-          docker build -t $DOCKER_REPO:latest .
-          docker images
+  # image-build:
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     DOCKER_REPO: shaikbyte/cicd-java
+  #     DOCKER_TAG: latest
+  #   needs: build
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Download JAR Artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: java-app-jar
+  #         path: target 
+  #     - name: Build Docker image
+  #       run: |
+  #         docker build -t $DOCKER_REPO:latest .
+  #         docker images
 
-      - name: Install Trivy
-        run: |
-          sudo apt-get update
-          sudo apt-get install wget apt-transport-https gnupg lsb-release -y
-          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-          echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
-          sudo apt-get update
-          sudo apt-get install trivy -y
-          docker images
+  #     - name: Install Trivy
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install wget apt-transport-https gnupg lsb-release -y
+  #         wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+  #         echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+  #         sudo apt-get update
+  #         sudo apt-get install trivy -y
+  #         docker images
 
-      - name: Trivy Docker Scan
-        run: trivy image $DOCKER_REPO:$DOCKER_TAG
+  #     - name: Trivy Docker Scan
+  #       run: trivy image $DOCKER_REPO:$DOCKER_TAG
 
-      - name: Docker Login
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-      - name: Docker Push
-        run: docker push $DOCKER_REPO:latest
+  #     - name: Docker Login
+  #       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+  #     - name: Docker Push
+  #       run: docker push $DOCKER_REPO:latest
 
   # deploy:
   #   runs-on:  ubuntu-latest
@@ -242,7 +242,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: zap-report
-          path: owasp-zap-report/
+          path: owasp-zap-report/report.html
 
 
 
