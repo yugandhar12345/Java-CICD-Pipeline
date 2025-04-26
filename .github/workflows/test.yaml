@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: java-app-war
-          path: target/*.war
+          path: target/welcome-message-1.0-SNAPSHOT.war
 
   test:
     runs-on: ubuntu-latest
