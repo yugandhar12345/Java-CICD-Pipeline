@@ -104,9 +104,10 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-          -Dsonar.login=$SONAR_TOKEN \
-          -Dsonar.coverage.jacoco.reportPaths=jacoco-report/jacoco.xml # Adj
+        run: |
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.login=$SONAR_TOKEN \
+            -Dsonar.coverage.jacoco.reportPaths=jacoco-report/jacoco.xml
       # - name: Build and analyze
       #   env:
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
