@@ -12,7 +12,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Update the JAR filename here to match the generated file name
-COPY java-app.jar app.jar
+COPY target/*.jar app.jar
 
 EXPOSE 8080
 
