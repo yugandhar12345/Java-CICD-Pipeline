@@ -182,6 +182,11 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v3
+      - name: Download JAR Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: java-app-jar
+          path: target 
       - name: Build Docker image
         run: |
           docker build -t $DOCKER_REPO:latest .
