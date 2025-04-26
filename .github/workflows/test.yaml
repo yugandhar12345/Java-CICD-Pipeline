@@ -212,7 +212,7 @@ jobs:
 
   deploy:
     runs-on:  ubuntu-latest
-    needs: image-push
+    # needs: image-push
     steps:
       - name: ArgoCD Deploy
         run: |
