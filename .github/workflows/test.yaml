@@ -230,23 +230,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Create output directory
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Install OWASP ZAP CLI
+        run: |
+          sudo apt update
+          sudo apt install -y wget unzip
+          wget https://github.com/zaproxy/zaproxy/releases/download/v2.14.0/ZAP_2.14.0_Linux.tar.gz
+          tar -xzf ZAP_2.14.0_Linux.tar.gz
+          mv ZAP_2.14.0 zap
+          echo "$(pwd)/zap" >> $GITHUB_PATH
+
+      - name: Create report directory
         run: mkdir -p owasp-zap-report
 
-      - name: Run OWASP ZAP DAST Scan
+      - name: Run ZAP Baseline Scan
         run: |
-          docker run --rm \
-            -e JAVA_OPTS="-Xmx2g" \
-            -v "${{ github.workspace }}/owasp-zap-report:/zap/wrk/:rw" \
-            ghcr.io/zaproxy/zaproxy:stable zap.sh \
-            -cmd -quickurl http://testphp.vulnweb.com \
-            -quickout /zap/wrk/report.html
-
-      - name: Check if report was created
-        run: ls -lh owasp-zap-report
+          zap/zap.sh -cmd -quickurl http://testphp.vulnweb.com \
+          -quickout owasp-zap-report/report.html \
+          -silent
 
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
