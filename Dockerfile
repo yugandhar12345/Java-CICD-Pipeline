@@ -8,15 +8,12 @@
 
 # ENTRYPOINT ["java", "-jar", "app.jar"]
 # Use official Tomcat base image
-FROM tomcat:9.0
+FROM openjdk:17-jdk-slim
 
-# Clean the default apps (optional, keeps it clean)
-RUN rm -rf /usr/local/tomcat/webapps/*
+WORKDIR /app
 
-# Copy your WAR file into Tomcat's webapps directory
-COPY target/*.war /usr/local/tomcat/webapps/ROOT.war
+COPY target/*.jar app.jar
 
-# Expose Tomcat port
 EXPOSE 8080
 
-# No need for custom entrypoint; Tomcat starts automatically
+ENTRYPOINT ["sh", "-c", "java -jar app.jar && sleep infinity"]
