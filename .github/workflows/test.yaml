@@ -69,8 +69,9 @@ jobs:
 
 
 
+
   build:
-    name: SonarCloud Analysis
+    name: Build and analyze on SonarCloud
     runs-on: ubuntu-latest
 
     steps:
@@ -90,7 +91,10 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: SonarCloud Scan
+      - name: Build with Maven
+        run: mvn clean verify
+
+      - name: Run SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -99,6 +103,7 @@ jobs:
             -Dsonar.projectKey=security3124314_sonarqube
             -Dsonar.organization=security3124314
             -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.java.binaries=target
 
 
   # sonarcloud:
