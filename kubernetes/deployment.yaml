@@ -12,13 +12,10 @@ spec:
       labels:
         app: java-deploy
     spec:
-      securityContext:         
-        runAsNonRoot: true
       containers:
       - name: java-deploy
         image: shaikbyte/cicd-java:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8080  
-        securityContext:        
-          allowPrivilegeEscalation: false
+
