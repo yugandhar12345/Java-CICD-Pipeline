@@ -192,7 +192,7 @@ jobs:
           path: target 
       - name: Build Docker image
         run: |
-          docker build -t docker.io/shaikbyte/cicd-java:latest .
+          docker build -t shaikbyte/cicd-java:latest .
           docker images
 
       - name: Install Trivy
