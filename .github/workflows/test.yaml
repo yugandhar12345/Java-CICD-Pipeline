@@ -243,18 +243,12 @@ jobs:
         run: |
           sudo apt update
           sudo apt install wget -y
-  
-          # Download and install ZAP into user space (no sudo needed)
           mkdir -p $HOME/zap
           cd $HOME/zap
           wget https://github.com/zaproxy/zaproxy/releases/download/v2.16.0/ZAP_2_16_0_unix.sh
           chmod +x ZAP_2_16_0_unix.sh
           ./ZAP_2_16_0_unix.sh -q -dir $HOME/zap/zaproxy
-  
-          # Create writable report directory
           mkdir -p $HOME/zap/zaproxy/owasp-zap-report
-  
-          # Run ZAP and generate the report
           $HOME/zap/zaproxy/zap.sh -cmd -quickurl http://testphp.vulnweb.com \
             -quickout $HOME/zap/zaproxy/owasp-zap-report/report.html \
             -silent
