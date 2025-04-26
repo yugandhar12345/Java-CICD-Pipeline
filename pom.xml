@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -9,6 +8,13 @@
     <artifactId>welcome-message</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
+
+    <!-- Added SonarCloud properties -->
+    <properties>
+        <sonar.projectKey>shaik-byte_complete---cicd-java</sonar.projectKey>
+        <sonar.organization>shaik-byte</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    </properties>
 
     <dependencies>
         <dependency>
