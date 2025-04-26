@@ -22,7 +22,7 @@
     <properties>
         <sonar.organization>shaik-byte</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.projectKey>shaik-byte_complete---cicd-java</sonar.projec>
+        <sonar.projectKey>shaik-byte_complete---cicd-java</sonar.projectKey>
     </properties>
 
     <dependencies>
