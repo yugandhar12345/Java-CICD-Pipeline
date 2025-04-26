@@ -257,4 +257,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: zap-report
-          path: ${{ env.HOME }}/zap/zaproxy/owasp-zap-report/report.html
+          path:  /home/runner/zap/zaproxy/owasp-zap-report/report.html
+          
