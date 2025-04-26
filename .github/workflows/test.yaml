@@ -100,7 +100,8 @@ jobs:
         with:
           name: jacoco-report
           path: jacoco-report # Create a directory to download the report
-
+      - name: List downloaded JaCoCo report contents
+        run: ls -R jacoco-report
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
