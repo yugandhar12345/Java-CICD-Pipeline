@@ -205,13 +205,6 @@ jobs:
       - name: Trivy Docker Scan
         run: trivy image $DOCKER_REPO:$DOCKER_TAG
 
-  image-push:
-    runs-on:  ubuntu-latest
-    env:
-      DOCKER_REPO: shaikbyte/cicd-java
-      DOCKER_TAG: latest
-    # needs: image-scan
-    steps:
       - name: Docker Login
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
       - name: Docker Push
