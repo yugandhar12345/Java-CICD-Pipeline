@@ -244,12 +244,12 @@ jobs:
           sudo apt install -y wget apt-transport-https
           wget https://github.com/aquasecurity/trivy/releases/download/v0.38.3/trivy_0.38.3_Linux-64bit.deb
           sudo dpkg -i trivy_0.38.3_Linux-64bit.deb
-          sudo apt update
-          sudo apt install -y wget unzip
-          wget https://github.com/zaproxy/zaproxy/releases/download/v2.14.0/ZAP_2.14.0_Linux.tar.gz
-          tar -xzf ZAP_2.14.0_Linux.tar.gz
-          mv ZAP_2.14.0 zap
-          echo "$(pwd)/zap" >> $GITHUB_PATH
+          # sudo apt update
+          # sudo apt install -y wget unzip
+          # wget https://github.com/zaproxy/zaproxy/releases/download/v2.14.0/ZAP_2.14.0_Linux.tar.gz
+          # tar -xzf ZAP_2.14.0_Linux.tar.gz
+          # mv ZAP_2.14.0 zap
+          # echo "$(pwd)/zap" >> $GITHUB_PATH
 
       - name: Create report directory
         run: mkdir -p owasp-zap-report
