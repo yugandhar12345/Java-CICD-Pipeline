@@ -12,3 +12,17 @@ public class CodeKamikazeApplicationTest {
         assertEquals(expected, actual, "The welcome message should match");
     }
 }
+
+package com.example.codekamikaze;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class HelloServiceTest {
+
+    @Test
+    void testSayHello() {
+        HelloService service = new HelloService();
+        assertEquals("Hello, Sonar!", service.sayHello());
+    }
+}
