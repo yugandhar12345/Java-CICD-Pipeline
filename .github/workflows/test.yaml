@@ -177,7 +177,7 @@ jobs:
   image-build:
     runs-on: ubuntu-latest
     env:
-      DOCKER_REPO: shaikbyte/mlops  
+      DOCKER_REPO: shaikbyte/cicd-java 
       DOCKER_TAG: latest
     needs: build
     steps:
@@ -195,7 +195,7 @@ jobs:
   image-scan:
     runs-on:  ubuntu-latest
     env:
-      DOCKER_REPO: shaikbyte/mlops  
+      DOCKER_REPO: shaikbyte/cicd-java 
       DOCKER_TAG: latest
     needs: image-build
     steps:
@@ -216,6 +216,9 @@ jobs:
 
   image-push:
     runs-on:  ubuntu-latest
+    env:
+      DOCKER_REPO: shaikbyte/cicd-java  
+      DOCKER_TAG: latest
     needs: image-scan
     steps:
       - name: Docker Login
