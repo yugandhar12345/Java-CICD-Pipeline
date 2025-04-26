@@ -226,42 +226,42 @@ jobs:
 
 
 
-dast:
-  runs-on: ubuntu-latest
-
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up Java
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    - name: Install and Run OWASP ZAP CLI
-      run: |
-        sudo apt update
-        sudo apt install wget -y
-
-        # Download and install ZAP
-        wget https://github.com/zaproxy/zaproxy/releases/download/v2.16.0/ZAP_2_16_0_unix.sh
-        chmod +x ZAP_2_16_0_unix.sh
-        sudo ./ZAP_2_16_0_unix.sh -q -dir zaproxy
-
-        # Create writable report directory (no sudo!)
-        mkdir -p zaproxy/owasp-zap-report
-
-        # Run ZAP and generate the report
-        zaproxy/zap.sh -cmd -quickurl http://testphp.vulnweb.com \
-          -quickout zaproxy/owasp-zap-report/report.html \
-          -silent
-
-    - name: Upload ZAP Report
-      uses: actions/upload-artifact@v4
-      with:
-        name: zap-report
-        path: zaproxy/owasp-zap-report/report.html
+  dast:
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+  
+      - name: Install and Run OWASP ZAP CLI
+        run: |
+          sudo apt update
+          sudo apt install wget -y
+  
+          # Download and install ZAP
+          wget https://github.com/zaproxy/zaproxy/releases/download/v2.16.0/ZAP_2_16_0_unix.sh
+          chmod +x ZAP_2_16_0_unix.sh
+          sudo ./ZAP_2_16_0_unix.sh -q -dir zaproxy
+  
+          # Create writable report directory (no sudo!)
+          mkdir -p zaproxy/owasp-zap-report
+  
+          # Run ZAP and generate the report
+          zaproxy/zap.sh -cmd -quickurl http://testphp.vulnweb.com \
+            -quickout zaproxy/owasp-zap-report/report.html \
+            -silent
+  
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-report
+          path: zaproxy/owasp-zap-report/report.html
 
 
 
