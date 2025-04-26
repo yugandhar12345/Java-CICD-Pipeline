@@ -185,14 +185,14 @@ jobs:
     needs: malware-scan
     steps:
       - uses: actions/checkout@v3
-      - name: Download JAR Artifact
+      - name: Download WAR Artifact
         uses: actions/download-artifact@v4
         with:
           name:  java-app-war
           path: target 
       - name: Build Docker image
         run: |
-          docker build -t $DOCKER_REPO:latest .
+          docker build -t shaikbyte/cicd-java:latest .
           docker images
 
       - name: Install Trivy
