@@ -35,11 +35,11 @@ jobs:
       - name: Build with Maven (Skip Tests)
         run: mvn clean package -DskipTests
 
-      - name: Upload Build Artifact (JAR)
+      - name: Upload Build Artifact (WAR)
         uses: actions/upload-artifact@v4
         with:
-          name: java-app-jar
-          path: target/codekamikaze-1.0.0.jar
+          name: java-app-war
+          path: target/codekamikaze-1.0.0.war
 
   test:
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ jobs:
 
 
   sonar-scan:
-    name: Build and analyze
+    name: sonar-scan
     runs-on: ubuntu-latest
     needs: test
     steps:
