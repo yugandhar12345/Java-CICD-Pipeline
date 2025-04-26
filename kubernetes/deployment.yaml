@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-deploy
+  template:
+    metadata:
+      labels:
+        app: java-deploy
+    spec:
+      containers:
+      - name: java-deploy
+        image: shaikbyte/cicd-java:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+
+            
