@@ -253,11 +253,11 @@ jobs:
             
             # Create the report directory BEFORE running zap.sh
             sudo mkdir -p /opt/zaproxy/owasp-zap-report
-            sudo chown -R gitlab-runner:gitlab-runner /opt/zaproxy/owasp-zap-report
+            # sudo chown -R gitlab-runner:gitlab-runner /opt/zaproxy/owasp-zap-report
             sudo chmod -R 777 /opt/zaproxy/owasp-zap-report
             
             # Run ZAP in quick scan mode (headless)
-            sudo -u gitlab-runner /opt/zaproxy/zap.sh -cmd -quickurl http://34.35.54.231 -quickout /opt/zaproxy/owasp-zap-report/report.html
+            sudo  /opt/zaproxy/zap.sh -cmd -quickurl http://testphp.vulnweb.com -quickout /opt/zaproxy/owasp-zap-report/report.html
 
       - name: Create report directory
         run: mkdir -p owasp-zap-report
