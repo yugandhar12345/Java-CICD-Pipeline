@@ -235,7 +235,7 @@ jobs:
         run: |
           mkdir -p owasp-zap-report
           docker run --rm -v $(pwd)/owasp-zap-report:/zap/wrk/:rw ghcr.io/zaproxy/zaproxy:stable zap.sh \
-            -cmd -quickurl http://your-service-url \
+            -cmd -quickurl http://www.google.com \
             -quickout /zap/wrk/report.html
   
       - name: Upload ZAP Report
