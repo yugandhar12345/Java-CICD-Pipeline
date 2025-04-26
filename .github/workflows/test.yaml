@@ -7,72 +7,73 @@ on:
     branches: [ main ]
 
 jobs:
-  # install:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-  #     - name: Set up JDK 17
-  #       uses: actions/setup-java@v3
-  #       with:
-  #         distribution: 'temurin'
-  #         java-version: '17'
-
-  # build:
-  #   runs-on: ubuntu-latest
-  #   needs: install
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
-
-  #     - name: Set up JDK 17
-  #       uses: actions/setup-java@v3
-  #       with:
-  #         distribution: 'temurin'
-  #         java-version: '17'
-
-  #     - name: Build with Maven (Skip Tests)
-  #       run: mvn clean package -DskipTests
-
-  #     - name: Upload Build Artifact (JAR)
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: java-app-jar
-  #         path: target/codekamikaze-1.0.0.jar
-
-  # test:
-  #   runs-on: ubuntu-latest
-  #   needs: build
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
-
-  #     - name: Set up JDK 17
-  #       uses: actions/setup-java@v3
-  #       with:
-  #         distribution: 'temurin'
-  #         java-version: '17'
-
-  #     - name: Build and Run Tests with Maven
-  #       run: mvn clean verify
-
-  #     - name: List JaCoCo coverage report
-  #       run: |
-  #         ls -R target/site/jacoco || echo "No coverage report found"
-
-  #     - name: Upload JaCoCo report as artifact
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: jacoco-report
-  #         path: target/site/jacoco/
-
-
-
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
   build:
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build with Maven (Skip Tests)
+        run: mvn clean package -DskipTests
+
+      - name: Upload Build Artifact (JAR)
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-app-jar
+          path: target/codekamikaze-1.0.0.jar
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build and Run Tests with Maven
+        run: mvn clean verify
+
+      - name: List JaCoCo coverage report
+        run: |
+          ls -R target/site/jacoco || echo "No coverage report found"
+
+      - name: Upload JaCoCo report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
+
+
+
+
+  sonar-scan:
     name: Build and analyze
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - uses: actions/checkout@v4
         with:
@@ -100,26 +101,9 @@ jobs:
         # run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shaik-byte_complete---cicd-java -Dsonar.organization=security3124314 -Dsonar.host.url=https://sonarcloud.io
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.login=$SONAR_TOKEN
 
-  # sonarcloud:
-  #   runs-on: ubuntu-latest
-  #   needs: test
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: SonarCloud Scan
-  #       uses: SonarSource/sonarcloud-github-action@v2
-  #       env:
-  #         
-  #       with:
-  #         args: >
-        
-  #         -Dsonar.projectKey: security3124314_sonarqube
-  #         -Dsonar.organization: security3124314
-  #         -Dsonar.host.url: https://sonarcloud.io
-
-
   semgrep:
     runs-on: ubuntu-latest
-    # needs: sonarcloud
+    needs: sonar-scan
     steps:
       - uses: actions/checkout@v3
       - name: Install Semgrep
