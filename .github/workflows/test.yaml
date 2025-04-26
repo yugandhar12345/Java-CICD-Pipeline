@@ -254,7 +254,7 @@ jobs:
           sudo mkdir -p zaproxy/owasp-zap-report
 
           # Run ZAP
-          zaproxy/zap.sh -cmd -quickurl http://34.35.54.231 \
+          zaproxy/zap.sh -cmd -quickurl http://testphp.vulnweb.com \
             -quickout zaproxy/owasp-zap-report/report.html \
             -silent
 
