@@ -176,6 +176,9 @@ jobs:
 
   image-build:
     runs-on: ubuntu-latest
+    env:
+      DOCKER_REPO: shaikbyte/mlops  
+      DOCKER_TAG: latest
     needs: malware-scan
     steps:
       - uses: actions/checkout@v3
