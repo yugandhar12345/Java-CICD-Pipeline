@@ -1,11 +1,11 @@
 package com.example.codekamikaze;
 
-public class CodeKamikazeApplication {
-    public static String getWelcomeMessage() {
-        return "Welcome to CodeKamikaze";
-    }
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
+public class CodeKamikazeApplication {
     public static void main(String[] args) {
-        System.out.println(getWelcomeMessage());
+        SpringApplication.run(CodeKamikazeApplication.class, args);
     }
 }
