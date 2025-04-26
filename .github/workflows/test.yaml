@@ -239,40 +239,29 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Install OWASP ZAP CLI
+      - name: Install and Run OWASP ZAP CLI
         run: |
-            # Update and install dependencies
-            sudo apt update
-            sudo apt install openjdk-17-jdk wget -y
-            
-            # Download and install OWASP ZAP
-            cd /opt
-            sudo wget https://github.com/zaproxy/zaproxy/releases/download/v2.16.0/ZAP_2_16_0_unix.sh
-            sudo chmod +x ZAP_2_16_0_unix.sh
-            sudo ./ZAP_2_16_0_unix.sh -q -dir /opt/zaproxy
-            
-            # Create the report directory BEFORE running zap.sh
-            sudo mkdir -p /opt/zaproxy/owasp-zap-report
-            # sudo chown -R gitlab-runner:gitlab-runner /opt/zaproxy/owasp-zap-report
-            sudo chmod -R 777 /opt/zaproxy/owasp-zap-report
-            
-            # Run ZAP in quick scan mode (headless)
-            sudo  /opt/zaproxy/zap.sh -cmd -quickurl http://testphp.vulnweb.com -quickout /opt/zaproxy/owasp-zap-report/report.html
+          sudo apt update
+          sudo apt install wget -y
 
-      - name: Create report directory
-        run: mkdir -p owasp-zap-report
+          # Download and install ZAP
+          wget https://github.com/zaproxy/zaproxy/releases/download/v2.16.0/ZAP_2_16_0_unix.sh
+          chmod +x ZAP_2_16_0_unix.sh
+          ./ZAP_2_16_0_unix.sh -q -dir zaproxy
 
-      - name: Run ZAP Baseline Scan
-        run: |
-          zap/zap.sh -cmd -quickurl http://testphp.vulnweb.com \
-          -quickout owasp-zap-report/report.html \
-          -silent
+          # Make report directory inside workspace
+          mkdir -p zaproxy/owasp-zap-report
+
+          # Run ZAP
+          zaproxy/zap.sh -cmd -quickurl http://34.35.54.231 \
+            -quickout zaproxy/owasp-zap-report/report.html \
+            -silent
 
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
         with:
           name: zap-report
-          path: owasp-zap-report/report.html
+          path: zaproxy/owasp-zap-report/report.html
 
 
 
