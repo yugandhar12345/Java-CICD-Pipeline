@@ -9,3 +9,11 @@ public class CodeKamikazeApplication {
         System.out.println(getWelcomeMessage());
     }
 }
+
+package com.example.codekamikaze;
+
+public class HelloService {
+    public String sayHello() {
+        return "Hello, There!";
+    }
+}
