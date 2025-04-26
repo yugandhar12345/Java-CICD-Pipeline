@@ -244,7 +244,7 @@ jobs:
           sudo apt update
           sudo apt install wget -y
           sudo mkdir -p $HOME/zap
-          sudo cd $HOME/zap
+          cd $HOME/zap
           sudo wget https://github.com/zaproxy/zaproxy/releases/download/v2.16.0/ZAP_2_16_0_unix.sh
           sudo chmod +x ZAP_2_16_0_unix.sh
           sudo ./ZAP_2_16_0_unix.sh -q -dir $HOME/zap/zaproxy
