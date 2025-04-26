@@ -230,6 +230,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+      - name: Create output directory
+        run: mkdir -p owasp-zap-report
   
       - name: Run OWASP ZAP DAST Scan
         run: |
