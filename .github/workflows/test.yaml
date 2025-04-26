@@ -241,15 +241,23 @@ jobs:
 
       - name: Install OWASP ZAP CLI
         run: |
-          sudo apt install -y wget apt-transport-https
-          wget https://github.com/aquasecurity/trivy/releases/download/v0.38.3/trivy_0.38.3_Linux-64bit.deb
-          sudo dpkg -i trivy_0.38.3_Linux-64bit.deb
-          # sudo apt update
-          # sudo apt install -y wget unzip
-          # wget https://github.com/zaproxy/zaproxy/releases/download/v2.14.0/ZAP_2.14.0_Linux.tar.gz
-          # tar -xzf ZAP_2.14.0_Linux.tar.gz
-          # mv ZAP_2.14.0 zap
-          # echo "$(pwd)/zap" >> $GITHUB_PATH
+            # Update and install dependencies
+            sudo apt update
+            sudo apt install openjdk-17-jdk wget -y
+            
+            # Download and install OWASP ZAP
+            cd /opt
+            sudo wget https://github.com/zaproxy/zaproxy/releases/download/v2.16.0/ZAP_2_16_0_unix.sh
+            sudo chmod +x ZAP_2_16_0_unix.sh
+            sudo ./ZAP_2_16_0_unix.sh -q -dir /opt/zaproxy
+            
+            # Create the report directory BEFORE running zap.sh
+            sudo mkdir -p /opt/zaproxy/owasp-zap-report
+            sudo chown -R gitlab-runner:gitlab-runner /opt/zaproxy/owasp-zap-report
+            sudo chmod -R 777 /opt/zaproxy/owasp-zap-report
+            
+            # Run ZAP in quick scan mode (headless)
+            sudo -u gitlab-runner /opt/zaproxy/zap.sh -cmd -quickurl http://34.35.54.231 -quickout /opt/zaproxy/owasp-zap-report/report.html
 
       - name: Create report directory
         run: mkdir -p owasp-zap-report
