@@ -247,10 +247,12 @@ jobs:
           # Download and install ZAP
           wget https://github.com/zaproxy/zaproxy/releases/download/v2.16.0/ZAP_2_16_0_unix.sh
           chmod +x ZAP_2_16_0_unix.sh
-          ./ZAP_2_16_0_unix.sh -q -dir zaproxy
+          sudo ./ZAP_2_16_0_unix.sh -q -dir zaproxy
   
           # Create writable report directory (no sudo!)
-          mkdir -p zaproxy/owasp-zap-report
+          sudo mkdir -p zaproxy/owasp-zap-report
+          sudo chmod -R 777 /opt/zaproxy/owasp-zap-report
+
   
           # Run ZAP and generate the report
           zaproxy/zap.sh -cmd -quickurl http://testphp.vulnweb.com \
