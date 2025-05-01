@@ -209,7 +209,7 @@ jobs:
 #         run: docker push $DOCKER_REPO:latest
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     # needs: image-build   
   
     steps:
