@@ -20,6 +20,33 @@
 #         - containerPort: 8080  
 
 
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: java-deploy
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: java-deploy
+#   template:
+#     metadata:
+#       labels:
+#         app: java-deploy
+#     spec:
+#       containers:
+#       - name: java-deploy
+#         image: shaikbyte/cicd-java:latest
+#         imagePullPolicy: Always
+#         ports:
+#         - containerPort: 8080
+#         securityContext:
+#           allowPrivilegeEscalation: false
+#           runAsNonRoot: true
+#           runAsUser: 1000   # (non-root user id)
+
+
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -40,8 +67,10 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: java-config
         securityContext:
           allowPrivilegeEscalation: false
           runAsNonRoot: true
-          runAsUser: 1000   # (non-root user id)
-
+          runAsUser: 1000
