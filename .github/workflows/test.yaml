@@ -227,8 +227,8 @@ jobs:
         run: |
          
           argocd login $ARGOCD_SERVER --username $ARGOCD_USERNAME --password $ARGOCD_PASSWORD --insecure
-          argocd app sync app-java
-          argocd app wait app-java --health --operation
+          argocd app sync app-java-1
+          argocd app wait app-java-1 --health --operation
 
 
 
