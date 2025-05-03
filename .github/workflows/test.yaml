@@ -175,7 +175,7 @@ jobs:
   image-build:
     runs-on: ubuntu-latest
     env:
-      DOCKER_REPO: shaikbyte/cicd-java
+      DOCKER_REPO: 123456789101234/cicd-java
       DOCKER_TAG: latest
     needs: malware-scan
     steps:
@@ -187,7 +187,7 @@ jobs:
           path: target 
       - name: Build Docker image
         run: |
-          docker build -t shaikbyte/cicd-java:latest .
+          docker build -t 123456789101234/cicd-java:latest .
           docker images
 
       - name: Install Trivy
