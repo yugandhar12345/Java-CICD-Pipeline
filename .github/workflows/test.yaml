@@ -220,7 +220,7 @@ jobs:
   
      - name: ArgoCD Login and Deploy
        env:
-          ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
+          ARGOCD_SERVER: 34.9.0.109:8080
           ARGOCD_USERNAME: ${{ secrets.ARGOCD_USERNAME }}
           ARGOCD_PASSWORD: ${{ secrets.ARGOCD_PASSWORD }}
           run: |
