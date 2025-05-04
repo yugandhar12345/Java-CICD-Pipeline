@@ -256,7 +256,7 @@ jobs:
           sudo chmod +x ZAP_2_16_0_unix.sh
           sudo ./ZAP_2_16_0_unix.sh -q -dir $HOME/zap/zaproxy
           sudo mkdir -p $HOME/zap/zaproxy/owasp-zap-report
-          sudo $HOME/zap/zaproxy/zap.sh -cmd -quickurl http://34.170.152.44/welcome-message-1.0-SNAPSHOT/welcome \
+          sudo $HOME/zap/zaproxy/zap.sh -cmd -quickurl http://34.9.75.207/welcome-message-1.0-SNAPSHOT/welcome \
             -quickout $HOME/zap/zaproxy/owasp-zap-report/report.html \
             -silent
   
