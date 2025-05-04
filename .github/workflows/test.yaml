@@ -212,18 +212,21 @@ jobs:
     needs: image-build   
   
   steps:
-  - name: Login to ArgoCD
-        run:|
-           echo "Logging into ArgoCD CLI"
-           argocd login $ARGOCD_SERVER --username $ARGOCD_USERNAME --password $ARGOCD_PASSWORD --insecure
-           echo "Syncing app"
-           argocd app sync app-java-1
-           echo "Waiting for app health and operation to complete"
-           argocd app wait app-java-1 --health --operation
-      env:
-         ARGOCD_SERVER: 34.9.0.109:8080
-         ARGOCD_USERNAME: admin
-         ARGOCD_PASSWORD: my-secure-password
+     - name: Install ArgoCD CLI
+       run: |
+          curl -sLO https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+          chmod +x argocd-linux-amd64
+          sudo mv argocd-linux-amd64 /usr/local/bin/argocd
+  
+     - name: ArgoCD Login and Deploy
+       env:
+          ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
+          ARGOCD_USERNAME: ${{ secrets.ARGOCD_USERNAME }}
+          ARGOCD_PASSWORD: ${{ secrets.ARGOCD_PASSWORD }}
+          run: |
+            argocd login $ARGOCD_SERVER --username $ARGOCD_USERNAME --password $ARGOCD_PASSWORD --insecure
+            argocd app sync app-java-1
+            argocd app wait app-java-1 --health --operation
 
   dast:
     runs-on: ubuntu-latest
