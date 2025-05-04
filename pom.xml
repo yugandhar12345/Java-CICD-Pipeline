@@ -11,8 +11,8 @@
 
     <!-- Added SonarCloud properties -->
     <properties>
-        <sonar.projectKey>shaik-byte_complete---cicd-java</sonar.projectKey>
-        <sonar.organization>shaik-byte</sonar.organization>
+        <sonar.projectKey>yugandhar12345_Java-CICD-Pipeline</sonar.projectKey>
+        <sonar.organization>yugandhar12345</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
